@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+var http = require("http")
+const port = process.env.PORT || 4000;
 
 // define the Express app
 const app = express();
@@ -19,13 +21,16 @@ app.use(cors());
 
 // log HTTP requests
 app.use(morgan('combined'));
-const axios = require('axios');
 var redis = require('redis');
 const WebSocket = require('ws');
 
 //const wss = new SocketServer({app})
-const wss = new WebSocket.Server({ port: 3030 });
+//const wss = new WebSocket.Server({server: app, port});
+let server = require('http').createServer();
+//const wss = new WebSocket.Server({ port: 3030 });
+const wss = new WebSocket.Server({ server:server });
 
+server.on('request', app);
 //var client = redis.createClient();
 if (process.env.REDISTOGO_URL) {
     var rtg   = require("url").parse(process.env.REDISTOGO_URL);
@@ -48,6 +53,8 @@ clientRedis.set('NZ', '-36.8404,174.74', redis.print);
 clientRedis.set('AU', '-33.8667,151.2', redis.print);
 clientRedis.set('UK', '51.5072,-0.1275', redis.print);
 clientRedis.set('USA', '32.674684,-83.25066', redis.print);
+
+
 
 wss.on('connection', function connection(ws) {
     ws.on('message', function incoming(data) {  
@@ -120,8 +127,14 @@ function intent(){
 }
 
 
-const port = process.env.PORT || 4000;
+
 // start the server
+/*
 app.listen(port, () => {
   console.log('listening on port 4000');
+});
+*/
+
+server.listen(port, function() {
+    console.log(`http/ws server listening on ${port}`);
 });

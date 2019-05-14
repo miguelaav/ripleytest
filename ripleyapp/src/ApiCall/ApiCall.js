@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
+//import {Link} from 'react-router-dom';
 import axios from 'axios';
 
-const URL = 'wss://localhost:3030'
+const URL = 'wss://afternoon-island-44333.herokuapp.com/'
+//const URL = 'ws://localhost:4000/'
 
 class ApiCall extends Component {
   constructor(props) {
@@ -18,14 +19,15 @@ class ApiCall extends Component {
   ws = new WebSocket(URL)
 
   async loadConstruction( id ) {
-    
-    const results = (await axios.get('https://limitless-tor-39189.herokuapp.com/'+id)).data;
+    const results = (await axios.get('https://afternoon-island-44333.herokuapp.com/'+id)).data;
     this.setState({
         temperature : results.body.currently.temperature,
         time : this.convertTimestamp(results.body.currently.time),
         zone : results.body.timezone,
     });
-    this.submitMessage(id);
+    if (id) {
+      this.submitMessage(id);
+    }
   }
 
   convertTimestamp(tim) {
