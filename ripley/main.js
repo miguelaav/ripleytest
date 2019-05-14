@@ -24,8 +24,6 @@ app.use(morgan('combined'));
 var redis = require('redis');
 const WebSocket = require('ws');
 
-//const wss = new SocketServer({app})
-//const wss = new WebSocket.Server({server: app, port});
 let server = require('http').createServer();
 //const wss = new WebSocket.Server({ port: 3030 });
 const wss = new WebSocket.Server({ server:server });
@@ -125,15 +123,6 @@ app.get('/:id', (req, res) => {
 function intent(){
     
 }
-
-
-
-// start the server
-/*
-app.listen(port, () => {
-  console.log('listening on port 4000');
-});
-*/
 
 server.listen(port, function() {
     console.log(`http/ws server listening on ${port}`);
